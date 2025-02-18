@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-100;
+  }
+
+  body {
+    @apply text-md bg-beige-100 min-h-screen;
+  }
+
+  h1 {
+    @apply text-xl font-bold;
+  }
+
+  h2 {
+    @apply text-lg font-bold;
+  }
+
+  h3 {
+    @apply text-md font-bold;
+  }
+
+  p {
+    @apply text-sm;
+  }
+
+  label {
+    @apply text-sm text-gray-500;
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --error: 0 84.2% 60.2%;
+  }
+}
+
+@layer components {
+  .form {
+    @apply space-y-6 mb-8;
+  }
+
+  input.input {
+    @apply w-full h-11 border rounded-lg px-5 text-sm;
+  }
+
+  input.input-error {
+    @apply border-red-500;
+  }
+
+  .label {
+    @apply flex justify-between text-gray-500 font-medium text-sm h-6 mb-2;
+  }
+
+  .label-error {
+    @apply text-red-500;
+  }
+
+  .error-text {
+    @apply text-red-500 text-sm;
+  }
+
+  li.active {
+    @apply border-green bg-white text-black;
+  }
+
+  li.active path {
+    @apply fill-green;
+  }
+}
