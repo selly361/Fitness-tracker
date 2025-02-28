@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const PRIVATE_ROUTES = ["/", "/log-workout", "progress", "goals", "community"];
+const PRIVATE_ROUTES = ["/", "/workouts", "/progress", "goals"];
 
 export const updateSession = async (request: NextRequest) => {
   let response = NextResponse.next({
