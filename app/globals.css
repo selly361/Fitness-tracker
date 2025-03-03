@@ -112,11 +112,11 @@
   }
 
   li.active {
-    @apply border-green bg-white text-black;
+    @apply border-green-default bg-white text-black;
   }
 
   li.active path {
-    @apply fill-green;
+    @apply fill-green-default;
   }
 }
 
