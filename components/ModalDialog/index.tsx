@@ -11,15 +11,14 @@ import {
 } from '@/components/ui/dialog'
 
 interface ModalDialogProps {
-  triggerLabel: string
+  triggerLabel?: string
   title: string
   description?: string
   triggerButtonProps?: React.ComponentProps<typeof Button>
   className?: string
   children: React.ReactNode
-  isOpen?: boolean
-  onOpen?: () => void
-  onClose?: () => void
+  setOpen: (open: boolean) => void
+  isOpen: boolean
 }
 
 export default function ModalDialog({
@@ -30,19 +29,21 @@ export default function ModalDialog({
   className,
   children,
   isOpen,
-  onOpen,
-  onClose,
+  setOpen,
 }: ModalDialogProps) {
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => (open ? onOpen?.() : onClose?.())}
-    >
-      <DialogTrigger asChild>
-        <Button className='bg-[#842C7E] hover:bg-[#842C6E]' {...triggerButtonProps} onClick={onOpen}>
-          {triggerLabel}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
+      {triggerLabel && (
+        <DialogTrigger asChild>
+          <Button
+            className='bg-[#842C7E] hover:bg-[#842C6E]'
+            {...triggerButtonProps}
+            onClick={() => setOpen(true)}
+          >
+            {triggerLabel}
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className={className ?? 'w-11/12' + ' h-'}>
         <DialogHeader className='mb-4'>
           <DialogTitle className='text-xl text-grey-900'>{title}</DialogTitle>
