@@ -15,6 +15,26 @@ export async function insertWorkout(workoutData: Workout) {
   revalidatePath('/workouts')
 }
 
+export async function updateWorkout(workoutData: Workout) {
+  const supabase = await createServer()
+
+  const { error } = await supabase
+    .from('workouts')
+    .update({
+      type: workoutData.type,
+      duration: workoutData.duration,
+      calories: workoutData.calories,
+      weight_lifted: workoutData.weight_lifted,
+      distance: workoutData.distance,
+    })
+    .eq('id', workoutData.id)
+
+  if (error) throw new Error(error.message)
+
+  revalidatePath('/')
+  revalidatePath('/workouts')
+}
+
 export async function getWorkouts(): Promise<Workout[]> {
   const supabase = await createServer()
 
