@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Dumbbell, Bike, Footprints, MoreHorizontal } from 'lucide-react'
 import { deleteGoal } from '@/actions'
 import { Goal } from '@/types'
@@ -14,6 +14,8 @@ import {
   CardTitle,
   Progress,
 } from '@/components/ui'
+import { ModalDialog } from '@/components'
+import GoalForm from './GoalForm'
 import { toast } from 'sonner'
 
 const ICONS: Record<string, React.JSX.Element> = {
@@ -33,6 +35,8 @@ export default function GoalCard({
   deadline,
   status,
 }: GoalCardProps) {
+  const [isEditOpen, setIsEditOpen] = useState(false)
+
   const handleDelete = async (goalId: string) => {
     try {
       await deleteGoal(goalId)
@@ -55,11 +59,16 @@ export default function GoalCard({
             <MoreHorizontal className='text-gray-400 cursor-pointer' />
           </PopoverTrigger>
           <PopoverContent className='space-y-2 w-20 p-2'>
-            <button className='text-gray-500 text-sm outline-none'>Edit</button>
+            <button
+              className='text-grey-900 text-sm outline-none'
+              onClick={() => setIsEditOpen(true)}
+            >
+              Edit
+            </button>
             <hr />
             <button
               onClick={() => handleDelete(id as string)}
-              className='text-red-500 text-sm outline-none'
+              className='text-red text-sm outline-none'
             >
               Delete
             </button>
@@ -103,6 +112,27 @@ export default function GoalCard({
           </p>
         </div>
       </CardContent>
+
+      {/* Modal for Editing */}
+      <ModalDialog
+        title='Edit Goal'
+        description='Modify your goal details and track your progress effectively.'
+        isOpen={isEditOpen}
+        setOpen={setIsEditOpen}
+      >
+        <GoalForm
+          goalData={{
+            id,
+            type,
+            goal_name,
+            target_value,
+            current_value,
+            deadline,
+            status,
+          }}
+          onSuccess={() => setIsEditOpen(false)}
+        />
+      </ModalDialog>
     </Card>
   )
 }

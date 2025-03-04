@@ -10,7 +10,7 @@ import {
   SelectItem,
 } from '@/components/ui'
 import { useState } from 'react'
-import { insertGoal } from '@/actions'
+import { insertGoal, updateGoal } from '@/actions'
 import { Goal } from '@/types'
 import { toast } from 'sonner'
 
@@ -18,10 +18,11 @@ const GOAL_TYPES = ['Running', 'Cycling', 'Weight Lifting']
 
 interface GoalFormProps {
   onSuccess: () => void
+  goalData?: Goal
 }
 
-function GoalForm({ onSuccess }: GoalFormProps) {
-  const [selectedType, setSelectedType] = useState('')
+function GoalForm({ onSuccess, goalData }: GoalFormProps) {
+  const [selectedType, setSelectedType] = useState(goalData?.type || '')
 
   const {
     register,
@@ -29,23 +30,41 @@ function GoalForm({ onSuccess }: GoalFormProps) {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<Goal>()
+  } = useForm<Goal>({
+    defaultValues: goalData || {
+      current_value: 0,
+      target_value: 0,
+      type: '',
+      goal_name: '',
+    },
+  })
 
   const type = watch('type')
 
   const onSubmit = async (data: Goal) => {
     try {
-      await insertGoal({
-        ...data,
-        current_value: 0, // Goals start at 0 progress
-        status: 'in-progress',
-      })
-      onSuccess()
+      if (goalData?.id) {
+        await updateGoal({
+          ...goalData,
+          goal_name: data.goal_name,
+          type: data.type,
+          target_value: data.target_value,
+          deadline: data.deadline,
+        })
+        toast.success('Goal successfully updated!')
+      } else {
+        await insertGoal({
+          ...data,
+          current_value: 0,
+          status: 'in-progress',
+        })
+        toast.success('Goal successfully added!')
+      }
 
-      toast.success('Goal successfully added!')
+      onSuccess()
     } catch (error) {
-      console.error('Failed to add goal:', error)
-      toast.error('Failed to add goal. Please try again.')
+      console.error('Failed to process goal:', error)
+      toast.error('Something went wrong. Please try again.')
     }
   }
 
@@ -70,15 +89,14 @@ function GoalForm({ onSuccess }: GoalFormProps) {
         )}
       </div>
 
-      {/* Goal Type (Workout Type) */}
+      {/* Goal Type */}
       <div className='space-y-2'>
         <label className='block text-sm font-medium text-gray-700'>
           Goal Type
         </label>
         <Select
-          onValueChange={(value) => {
-            setValue('type', value)
-          }}
+          onValueChange={(value) => setValue('type', value)}
+          defaultValue={goalData?.type}
         >
           <SelectTrigger>
             <SelectValue placeholder='Select Goal Type' />
@@ -140,7 +158,7 @@ function GoalForm({ onSuccess }: GoalFormProps) {
         disabled={isSubmitting}
         className='w-full h-12 py-3 text-white bg-[#842C7E] rounded-lg hover:bg-[#9b4d9b] transition-colors'
       >
-        {isSubmitting ? 'Adding Goal...' : 'Add Goal'}
+        {isSubmitting ? 'Processing...' : goalData ? 'Update Goal' : 'Add Goal'}
       </Button>
     </form>
   )

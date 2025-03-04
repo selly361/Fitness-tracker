@@ -5,7 +5,7 @@ import { ModalDialog } from '@/components'
 import { useState } from 'react'
 
 function NewGoalModal() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false)
 
   return (
     <ModalDialog
@@ -13,10 +13,9 @@ function NewGoalModal() {
       description='Stay motivated by setting fitness goals. Choose a goal type, define your target, and track your progress.'
       triggerLabel='+ Add Goal'
       isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
-      onOpen={() => setIsOpen(true)}
+      setOpen={setOpen}
     >
-      <GoalForm onSuccess={() => setIsOpen(false)} />
+      <GoalForm onSuccess={() => setOpen(false)} />
     </ModalDialog>
   )
 }
