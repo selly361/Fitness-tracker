@@ -57,7 +57,7 @@ export default function DashboardClient({
       </section>
 
       {/* Dashboard Grid Layout */}
-      <section className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      <section className='grid grid-cols-1 md:grid-cols-2 gap-6 h-max'>
         {/* Left Side: Smaller Chart */}
         <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200'>
           <h2 className='text-2xl font-bold text-[#3A2559] mb-4'>
@@ -71,12 +71,15 @@ export default function DashboardClient({
         </div>
 
         {/* Right Side: Goal Summary */}
-        <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200'>
+        <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200 h-max'>
           <h2 className='text-2xl font-bold text-[#3A2559] mb-4'>
             Recent Goal Progress
           </h2>
           {goals.length > 0 ? (
-            <GoalCard key={goals[0].id} {...goals[0]} />
+            <div className='flex flex-col gap-8'>
+              <GoalCard key={goals[0].id} {...goals[0]} />
+              {goals[1] && <GoalCard key={goals[1]?.id} {...goals[1]} />}
+            </div>
           ) : (
             <p className='text-gray-500'>No active goals set.</p>
           )}
