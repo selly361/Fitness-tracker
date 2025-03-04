@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Dumbbell, Bike, Footprints, MoreHorizontal } from 'lucide-react'
 import { deleteWorkout } from '@/actions'
 import { Workout } from '@/types'
@@ -13,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui'
+import { ModalDialog } from '@/components'
+import LogWorkoutForm from './LogWorkoutForm'
 import { toast } from 'sonner'
 
 const ICONS: Record<string, React.JSX.Element> = {
@@ -31,6 +33,8 @@ export default function WorkoutCard({
   weight_lifted,
   distance,
 }: WorkoutCardProps) {
+  const [isEditOpen, setIsEditOpen] = useState(false)
+
   const handleDelete = async (workoutId: string) => {
     try {
       await deleteWorkout(workoutId)
@@ -51,7 +55,12 @@ export default function WorkoutCard({
             <MoreHorizontal className='text-gray-400 cursor-pointer' />
           </PopoverTrigger>
           <PopoverContent className='space-y-2 w-20 p-2'>
-            <button className='text-grey-500 text-sm outline-none'>Edit</button>
+            <button
+              className='text-grey-900 text-sm outline-none'
+              onClick={() => setIsEditOpen(true)}
+            >
+              Edit
+            </button>
             <hr />
             <button
               onClick={() => handleDelete(id as string)}
@@ -83,6 +92,25 @@ export default function WorkoutCard({
           </p>
         )}
       </CardContent>
+
+      <ModalDialog
+        title='Edit Workout'
+        description='Modify your workout details and track your progress accurately.'
+        isOpen={isEditOpen}
+        setOpen={setIsEditOpen}
+      >
+        <LogWorkoutForm
+          workoutData={{
+            id,
+            type,
+            duration,
+            calories,
+            weight_lifted,
+            distance,
+          }}
+          onSuccess={() => setIsEditOpen(false)}
+        />
+      </ModalDialog>
     </Card>
   )
 }
