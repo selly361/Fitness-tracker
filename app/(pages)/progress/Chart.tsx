@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import * as Recharts from 'recharts'
 import { Workout } from '@/types'
 import { format } from 'date-fns'
+import { Button } from '@/components/ui'
 
 type ChartProps = {
   workouts: Workout[]
@@ -17,8 +18,16 @@ const RunningChart = ({ workouts }: { workouts: Workout[] }) => {
       distance: workout.distance,
     }))
 
+  if (data.length === 0) {
+    return (
+      <p className='text-center text-gray-500'>
+        No Running data available. Log a running workout to see progress.
+      </p>
+    )
+  }
+
   return (
-    <Recharts.ResponsiveContainer width='100%' height={300}>
+    <Recharts.ResponsiveContainer width='100%' height={500}>
       <Recharts.LineChart data={data}>
         <Recharts.CartesianGrid strokeDasharray='3 3' />
         <Recharts.XAxis
@@ -43,8 +52,16 @@ const CyclingChart = ({ workouts }: { workouts: Workout[] }) => {
       distance: workout.distance,
     }))
 
+  if (data.length === 0) {
+    return (
+      <p className='text-center text-gray-500'>
+        No Cycling data available. Log a cycling workout to see progress.
+      </p>
+    )
+  }
+
   return (
-    <Recharts.ResponsiveContainer width='100%' height={300}>
+    <Recharts.ResponsiveContainer width='100%' height={500}>
       <Recharts.LineChart data={data}>
         <Recharts.CartesianGrid strokeDasharray='3 3' />
         <Recharts.XAxis
@@ -69,8 +86,17 @@ const WeightLiftingChart = ({ workouts }: { workouts: Workout[] }) => {
       'Weight Lifted': workout.weight_lifted,
     }))
 
+  if (data.length === 0) {
+    return (
+      <p className='text-center text-gray-500'>
+        No Weight Lifting data available. Log a weight lifting workout to see
+        progress.
+      </p>
+    )
+  }
+
   return (
-    <Recharts.ResponsiveContainer width='100%' height={300}>
+    <Recharts.ResponsiveContainer width='100%' height={500}>
       <Recharts.LineChart data={data}>
         <Recharts.CartesianGrid strokeDasharray='3 3' />
         <Recharts.XAxis
@@ -103,29 +129,32 @@ export const ChartContainer = ({ workouts }: ChartProps) => {
   )
 
   return (
-    <div className='w-full bg-gray-100 h-full py-8 px-4'>
+    <div className='w-full h-full py-8 px-4'>
       <div className='flex justify-center mb-6'>
-        <button
+        <Button
+          variant='outline'
           onClick={() => setSelectedType('Running')}
-          className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${selectedType === 'Running' ? 'bg-black' : 'bg-gray-600 hover:bg-gray-700'}`}
+          className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${selectedType === 'Running' ? 'text-[#842C7E] hover:bg-white hover:text-[#842C7E]' : 'text-grey-900 hover:bg-white hover:text-[#842C7E]'}`}
         >
           Running
-        </button>
-        <button
+        </Button>
+        <Button
+          variant='outline'
           onClick={() => setSelectedType('Cycling')}
-          className={`mx-4 px-6 py-3 rounded-lg text-white font-semibold transition-colors ${selectedType === 'Cycling' ? 'bg-black' : 'bg-gray-600 hover:bg-gray-700'}`}
+          className={`mx-4 px-6 py-3 rounded-lg text-white font-semibold transition-colors ${selectedType === 'Cycling' ? 'text-[#842C7E] hover:bg-white hover:text-[#842C7E]' : 'text-grey-900 hover:bg-white hover:text-[#842C7E]'}`}
         >
           Cycling
-        </button>
-        <button
+        </Button>
+        <Button
+          variant='outline'
           onClick={() => setSelectedType('Weight Lifting')}
-          className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${selectedType === 'Weight Lifting' ? 'bg-black' : 'bg-gray-600 hover:bg-gray-700'}`}
+          className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors ${selectedType === 'Weight Lifting' ? 'text-[#842C7E] hover:bg-white hover:text-[#842C7E]' : 'text-grey-900 hover:bg-white hover:text-[#842C7E]'}`}
         >
           Weight Lifting
-        </button>
+        </Button>
       </div>
       <div className='flex justify-center'>
-        <div className='w-[70%] p-6 bg-white shadow-lg rounded-lg'>
+        <div className='w-[80%] h-full p-6 bg-white rounded-lg'>
           <h2 className='text-2xl font-semibold text-center mb-4'>
             {selectedType}
           </h2>
